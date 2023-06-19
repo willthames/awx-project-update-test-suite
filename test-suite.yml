@@ -1,0 +1,31 @@
+- hosts: localhost
+  collections:
+    - awx.awx
+
+  tasks:
+    - name: run job with defaults
+      job_launch:
+        job_template: Test suite
+        job_type: run
+        extra_vars:
+          expect: default
+        controller_config_file: awx-cli.cfg
+
+      register: job1
+
+    - name: wait for job
+      job_wait:
+        job_id: "{{ job1.id }}"
+        timeout: 300
+
+    - name: get result
+      job_list:
+        query:
+          id: "{{ job1.id }}"
+      register: job1_result
+
+    - name: check result
+      assert:
+        that:
+          - job1_result | length == 1
+          - job1_result[0].successful

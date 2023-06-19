@@ -1,0 +1,69 @@
+- hosts: localhost
+  collections:
+    - awx.awx
+
+  tasks:
+
+    - name: Waits for AWX to be up and running before starting
+      ansible.builtin.wait_for:
+        host: localhost
+        port: 8080
+        timeout: 900
+
+    - name: set default tower settings
+      set_fact: &controller_config
+        controller_hostname: localhost:8080
+        controller_username: admin
+        controller_password: "{{ admin_password }}"
+
+    - name: Add organization
+      organization:
+        name: test-suite
+        description: "Test suite"
+        <<: *controller_config
+
+    - name: Add project
+      project:
+        description: Test suite project
+        name: test-suite
+        scm_allow_override: true
+        scm_branch: "{{ project_default | default(omit) }}"
+        scm_type: git
+        scm_url: git@github.com:willthames/awx-project-update-test-suite.git
+        scm_update_on_launch: true
+        scm_clean: true
+        organization: test-suite
+        <<: *controller_config
+
+    - name: Add inventory
+      inventory:
+        name: test-suite
+        organization: test-suite
+        <<: *controller_config
+
+    - name: Add inventory source
+      inventory_source:
+        name: test-suite
+        inventory: test-suite
+        source_project: test-suite
+        source_path: inventory
+        source: scm
+        update_on_launch: true
+        overwrite_vars: true
+        overwrite: true
+        organization: test-suite
+        <<: *controller_config
+
+    - name: Create job template
+      job_template:
+        name: Test suite
+        job_type: run
+        inventory: test-suite
+        project: test-suite
+        ask_variables_on_launch: true
+        ask_verbosity_on_launch: true
+        ask_scm_branch_on_launch: true
+        scm_branch: job-default
+        playbook: playbook.yml
+        diff_mode: true
+        <<: *controller_config

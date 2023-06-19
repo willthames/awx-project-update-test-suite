@@ -1,0 +1,12 @@
+- hosts: test
+
+  tasks:
+    - debug:
+        var: version
+
+    - debug:
+        var: expected
+
+    - assert:
+        that:
+          - version == expected
