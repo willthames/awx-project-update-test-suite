@@ -2,5 +2,5 @@
 test
 
 [test-group:vars]
-version=main
-sequence=5
+version=override
+sequence=4
