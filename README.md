@@ -4,13 +4,11 @@ This test suite exists to test the behaviour of project updates
 for AWX jobs with branch overrides set (or not set)
 
 There are three branches used for testing
-* project-default - used to ensure that job-default is respected
-  (should never actually be hit)
 * job-default - used when no branch override is set
 * override - used to test branch overrides
-* main - should always be ahead of default and override, really
+* main - should always be ahead of job-default and override, really
   exists to check that the project update isn't just pulling in
-  HEAD
+  HEAD. This branch contains the up to date test suites
 
 # Running the test suite
 
@@ -21,6 +19,10 @@ There are three branches used for testing
   ```
   ansible-galaxy collection install -p . awx.awx
   ```
+
+Run all setup and tests below from the main branch
+(Only playbook.yml and inventory
+are expected to be correct on the other branches)
 
 ## Part 1 (project branch unset)
 
@@ -50,7 +52,6 @@ ansible-playbook test-suite/job-override.yml
 
 Result:
   * FAIL: Updates inventory to job-default but executes on override branch
-
 
 ## Part 2 (project branch set to same as job template branch)
 

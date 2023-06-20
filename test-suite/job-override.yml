@@ -28,5 +28,5 @@
     - name: check result
       assert:
         that:
-          - job1_result | length == 1
-          - job1_result[0].successful
+          - job1_result.results | length == 1
+          - 'job1_result.results[0].status == "successful"'
