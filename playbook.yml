@@ -1,4 +1,7 @@
 - hosts: test
+  connection: local
+  vars:
+    branch: main
 
   tasks:
     - debug:
@@ -10,6 +13,12 @@
     - debug:
         var: sequence
 
-    - assert:
+    - name: inventory version should match expected 
+      assert:
         that:
           - version == expected
+
+    - name: project branch should match expected
+      assert:
+        that:
+          - branch  == expected

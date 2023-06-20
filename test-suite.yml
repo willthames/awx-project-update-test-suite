@@ -7,7 +7,7 @@
       job_launch:
         job_template: Test suite
         extra_vars:
-          expect: default
+          expected: default
         controller_config_file: awx-cli.cfg
       register: job1
 
