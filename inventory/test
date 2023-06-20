@@ -1,2 +1,5 @@
-[test]
-version = main
+[test-group]
+test
+
+[test-group:vars]
+version=main
