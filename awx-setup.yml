@@ -27,7 +27,7 @@
         description: Test suite project
         name: test-suite
         scm_allow_override: true
-        scm_branch: "{{ project_default | default(omit) }}"
+        scm_branch: "{{ project_branch | default(omit) }}"
         scm_type: git
         scm_url: https://github.com/willthames/awx-project-update-test-suite.git
         scm_update_on_launch: true
@@ -63,7 +63,7 @@
         ask_variables_on_launch: true
         ask_verbosity_on_launch: true
         ask_scm_branch_on_launch: true
-        scm_branch: job-default
+        scm_branch: "{{ project_branch | default('job-default') }}"
         playbook: playbook.yml
         diff_mode: true
         controller_config_file: awx-cli.cfg

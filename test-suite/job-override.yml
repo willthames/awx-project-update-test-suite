@@ -1,0 +1,32 @@
+- hosts: localhost
+  collections:
+    - awx.awx
+
+  tasks:
+    - name: run job with override
+      job_launch:
+        job_template: Test suite
+        scm_branch: override
+        extra_vars:
+          expected: override
+        controller_config_file: "{{ playbook_dir }}/../awx-cli.cfg"
+      register: job1
+
+    - name: wait for job
+      job_wait:
+        job_id: "{{ job1.id }}"
+        timeout: 300
+        controller_config_file: "{{ playbook_dir }}/../awx-cli.cfg"
+
+    - name: get result
+      job_list:
+        query:
+          id: "{{ job1.id }}"
+        controller_config_file: "{{ playbook_dir }}/../awx-cli.cfg"
+      register: job1_result
+
+    - name: check result
+      assert:
+        that:
+          - job1_result | length == 1
+          - job1_result[0].successful
