@@ -1,7 +1,7 @@
 - hosts: test
   connection: local
   vars:
-    branch: main
+    branch: job-default
 
   tasks:
     - debug:
