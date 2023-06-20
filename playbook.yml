@@ -7,6 +7,9 @@
     - debug:
         var: expected
 
+    - debug:
+        var: sequence
+
     - assert:
         that:
           - version == expected
