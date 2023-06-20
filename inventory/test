@@ -3,4 +3,4 @@ test
 
 [test-group:vars]
 version=main
-sequence=3
+sequence=5
